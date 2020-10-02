@@ -2,7 +2,6 @@ import React from 'react'
 import Note from './Note'
 
 const Notes = (props) => {
-    console.log(props)
     const {notes, checkNote, deleteNote} = props;
     const notesList = notes.length ? (
         notes.map(note => {

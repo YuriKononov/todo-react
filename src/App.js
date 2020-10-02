@@ -1,127 +1,122 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import{useSelector, useDispatch} from 'react-redux'
 import {increment,decrement, toggle} from './actions'
 import AddNote from './components/AddForm';
 import Footer from './components/Footer';
-
+import uuid from 'uuid/v1'
 import Notes from './components/Notes'
 import SearchForm from './components/SearchForm';
 
 
-class App extends Component {
-  
-  state={
-    notes : [
-        
-    ],
-    status : 'ALL',
-    value : ''
-    
-}
+function App() {
+ 
+  const [notes, setNotes] = useState([]);
+  const [status, setStatus] = useState('ALL');
+  const [searchValue, setSearchValue] = useState('');
 
-  checkNote=(id) => {
-    const newNotes = this.state.notes.map((note)=>{
-      return {...note}
-    })
+
+
+  const checkNote=(id) => {
+    const newNotes = notes.map((note)=>({...note}));
     newNotes.forEach((note) => {
       if (note.id === id){
         note.checked = !note.checked
       }
     })
-    this.setState({
-      notes : newNotes
-    })
-
+    setNotes(newNotes);
+    console.log('Notes after adding new one', notes);
   }
 
-  deleteNote=(id) => {
-    const notes = this.state.notes.filter(note => {
-      return note.id !==id
-    })
-    this.setState({
-      notes
-    })
+  console.log('Current state', notes)
+
+
+  const deleteNote=(id) => {
+    setNotes( notes.filter(note => {
+        return note.id !==id
+      })
+    )
   }
 
-  addNote = (note) =>{
-    note.id = Math.random();
-    const notes = [...this.state.notes, note]
-    this.setState({
-      notes
-    })
+  const addNote = (text, checked) =>{
+    const id = uuid();
+    setNotes(
+      [...notes, {text, checked, id}]
+    )
   }
 
 
-  showAll = () => {
+  const showAll = () => {
     const status = 'ALL'
-    this.setState({
+    
+    setStatus(
       status
-    })
+    )
+    console.log(status)
   }
 
 
-  showActive = () => {
+  const showActive = () => {
     const status = 'ACTIVE'
-    this.setState({
+    setStatus(
       status
-    })
+    )
+    console.log(status)
   }
 
 
-  showCompleted = () =>{
+  const showCompleted = () =>{
     const status = 'COMPLETED'
-    this.setState({
-      status
-    })
-  }
+    setStatus(status)
+    console.log(status)
+  };
 
 
-  searchNotes =(value) => {
-    this.setState({
-      value
-    })
-
-  }
+  const searchNotes =(searchValue) => {
+    setSearchValue(searchValue)}
 
 
-  render(){
-    const { notes } = this.state;
-    const checkedNotes = notes.filter(note =>{
-      return note.checked === false
+  
+  const checkedNotes = notes.filter(note =>{
+    return note.checked === false
   })
-    let filteredNotes =[]
+  let filteredNotes =[]
 
-    switch(this.state.status){
-      case 'ALL' :
-        filteredNotes = notes
-        break;
-      case 'ACTIVE':
-        filteredNotes = notes.filter((note) => note.checked === false)
-        break;
-      case 'COMPLETED':
-        filteredNotes = notes.filter((note) => note.checked === true)
-        break;
-      default:
-        break;
-    }
-
-
-    return (
-      <div className="App">
-        <h1 className='title'>todos</h1>
-        <div className="container">
-          <SearchForm searchNotes = {this.searchNotes}/>
-          <Notes notes={filteredNotes.filter(note => {
-      return note.text.includes(this.state.value)
-    })} checkNote = {this.checkNote} deleteNote ={this.deleteNote}/>
-          <AddNote addNote={this.addNote}/>
-          <Footer notes={filteredNotes} showCompleted = {this.showCompleted} showActive = {this.showActive} showAll={this.showAll} checkedNotes={checkedNotes}/>
-          
-        </div>
-      </div>
-    );
+  switch(status){
+    case 'ALL' :
+      filteredNotes = notes
+      break;
+    case 'ACTIVE':
+      filteredNotes = notes.filter((note) => note.checked === false)
+      break;
+    case 'COMPLETED':
+      filteredNotes = notes.filter((note) => note.checked === true)
+      break;
+    default:
+      break;
   }
+  return (
+    <div className="App">
+      <h1 className='title'>todos</h1>
+      <div className="container">
+        <SearchForm
+         searchNotes = {searchNotes}/>
+        <Notes
+          notes={filteredNotes.filter(note => 
+          {return note.text.includes(searchValue)})} 
+          checkNote = {checkNote}
+          deleteNote ={deleteNote}/>
+        <AddNote addNote={addNote}/>
+        <Footer 
+          showCompleted = {showCompleted} 
+          showActive = {showActive} 
+          showAll={showAll} 
+          checkedNotes={checkedNotes}
+        /> 
+      </div>
+    </div>
+  );
+
   
 }
-
+  
 export default App;

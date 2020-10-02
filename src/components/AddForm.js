@@ -1,20 +1,16 @@
-import React ,{Component} from 'react'
+import React ,{useState} from 'react'
 
-class AddNote extends Component{
+const AddNote =(props) => {
 
-    state ={
-        text:'',
-        checked:false
-    }
+    
+    const [text, setText] = useState('');
+    const [checked, setChecked] = useState(false)
 
-    handleSubmit =(e) => {
+    const handleSubmit =(e) => {
         e.preventDefault();
-        if(this.state.text){
-            this.props.addNote(this.state)
-            console.log(this.state)
-            this.setState({
-                text:''
-            })
+        if(text){
+            props.addNote(text, checked)
+            setText('')
         }
         else{
             console.log('Empty input!')
@@ -23,20 +19,20 @@ class AddNote extends Component{
     }
 
 
-    handleChange =(e) => {
-        this.setState({
-            text:e.target.value
-        })
-    }
-    render(){
-        return(
-            <div>
-                <form onSubmit={this.handleSubmit} className="form input">
-                    <input type="text" onChange={this.handleChange} className='new-todo' placeholder='What needs to be done?' value={this.state.text}/>
-                </form>
-            </div>
+    const handleChange =(e) => {
+        setText(
+            e.target.value
         )
     }
+    
+        return(
+            <>
+                <form onSubmit={handleSubmit} className="form input">
+                    <input type="text" onChange={handleChange} className='new-todo' placeholder='What needs to be done?' value={text}/>
+                </form>
+            </>
+        )
+    
 }
 
 export default AddNote
