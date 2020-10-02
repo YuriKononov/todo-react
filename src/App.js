@@ -110,8 +110,10 @@ class App extends Component {
       <div className="App">
         <h1 className='title'>todos</h1>
         <div className="container">
-          
-          <Notes notes={filteredNotes} deleteNote ={this.deleteNote}/>
+          <SearchForm searchNotes = {this.searchNotes}/>
+          <Notes notes={filteredNotes.filter(note => {
+      return note.text.includes(this.state.value)
+    })} checkNote = {this.checkNote} deleteNote ={this.deleteNote}/>
           <AddNote addNote={this.addNote}/>
           <Footer notes={filteredNotes} showCompleted = {this.showCompleted} showActive = {this.showActive} showAll={this.showAll} checkedNotes={checkedNotes}/>
           
