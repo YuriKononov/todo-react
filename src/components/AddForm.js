@@ -1,15 +1,19 @@
-import React ,{useState} from 'react'
+import React ,{useState} from 'react';
+import{useSelector, useDispatch} from 'react-redux';
+import uuid from 'uuid/v1'
+import  {addNewNote} from '../actions';
 
-const AddNote =(props) => {
+const AddNote =() => {
 
-    
     const [text, setText] = useState('');
-    const [checked, setChecked] = useState(false)
+    const dispatch = useDispatch();
 
-    const handleSubmit =(e) => {
+    const submitHandler = (e) => {
         e.preventDefault();
         if(text){
-            props.addNote(text, checked)
+            const todoItem ={text, checked:false, id:uuid()};
+            console.log(todoItem)
+            dispatch(addNewNote(todoItem));
             setText('')
         }
         else{
@@ -17,20 +21,13 @@ const AddNote =(props) => {
         }
         
     }
-
-
-    const handleChange =(e) => {
-        setText(
-            e.target.value
-        )
+    const changeHandler = (e) => {
+        setText(e.target.value);
     }
-    
         return(
-            <>
-                <form onSubmit={handleSubmit} className="form input">
-                    <input type="text" onChange={handleChange} className='new-todo' placeholder='What needs to be done?' value={text}/>
+                <form  className="form input" onSubmit={submitHandler}>
+                    <input type="text" className='new-todo' onChange={changeHandler} placeholder='What needs to be done?' value={text}/>
                 </form>
-            </>
         )
     
 }

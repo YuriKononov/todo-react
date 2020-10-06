@@ -1,16 +1,21 @@
-import React from 'react'
+
+import React ,{useState} from 'react';
+import{useSelector, useDispatch} from 'react-redux';
+import {deleteNote, checkNote} from '../actions';
+
 
 const Note = (props) =>{
 
-    const {text, checked, id, checkNote, deleteNote} = props;
+    const dispatch = useDispatch();
+    const {text, checked, id} = props;
 
     return(
         <div className="added">
             <span className={"checkPlace " + (checked ? "done" : "")}
-             onClick={()=>{checkNote(id)}}></span>
+             onClick={()=>{dispatch(checkNote(id))}}></span>
             <h4 className={'sub-title ' + (checked ? "done-sub-title" :"")}
-             onClick={()=>{checkNote(id)}}>{text}</h4>
-            <span className="del" onClick={()=>{deleteNote(id)}}>❌</span>
+             onClick={()=>{dispatch(checkNote(id))}}>{text}</h4>
+            <span className="del" onClick={()=>{dispatch(deleteNote(id))}}>❌</span>
         </div>
     )
 }

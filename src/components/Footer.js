@@ -1,17 +1,28 @@
-import React from 'react'
 
-function Footer(props) {
-    const { showCompleted, showActive, showAll, checkedNotes } = props;
+import React ,{useState} from 'react';
+import{useSelector, useDispatch} from 'react-redux';
+import { checkNote, allActiveNotes, allCompletedNotes, allNotes } from '../actions';
+
+function Footer() {
     
+    
+    const notes = useSelector(state => state.notes)
+    console.log(notes)
+    const dispatch = useDispatch()
+    const activeNotes = notes.filter(note =>{
+        return note.checked === false
+      })
+
+
     return (
         <div className="footer-buttons">
             <div className='count'>
-                We have {checkedNotes.length} items left
+                We have {activeNotes.length} items left
             </div>
             <ul className="btns">
-                <li className="filters"><button className="btn all" onClick={()=>{showAll()}}>All</button></li>
-                <li className="filters"><button className="btn active" onClick={()=>{showActive()}}>Active</button></li>
-                <li className="filters"><button className="btn completed" onClick={()=>{showCompleted()}}>Completed</button></li>
+                <li className="filters"><button className="btn all" onClick={()=>{dispatch(allNotes())}}>All</button></li>
+                <li className="filters"><button className="btn active" onClick={()=>{dispatch(allActiveNotes())}}>Active</button></li>
+                <li className="filters"><button className="btn completed" onClick={()=>{dispatch(allCompletedNotes())}}>Completed</button></li>
             </ul>
         </div>
     )

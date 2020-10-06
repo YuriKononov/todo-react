@@ -1,11 +1,16 @@
-import React, { useState } from 'react'
+import React ,{useState} from 'react';
+import {searchNotes} from '../actions';
+import{useSelector, useDispatch} from 'react-redux';
 
-const SearchForm =(props) => {
+
+
+const SearchForm =() => {
     
-    
+    const dispatch = useDispatch();
+
 
     const handleChange =(e) => {
-       props.searchNotes(e.target.value)
+       dispatch(searchNotes(e.target.value))
         
     }
 
@@ -22,10 +27,4 @@ const SearchForm =(props) => {
     )
     
 }
-    
-
-    
-
-
-
 export default SearchForm
